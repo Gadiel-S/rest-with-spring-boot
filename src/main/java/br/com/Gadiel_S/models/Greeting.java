@@ -1,4 +1,4 @@
-package br.com.Gadiel_S.model;
+package br.com.Gadiel_S.models;
 
 public record Greeting(long id, String content) {
 }
