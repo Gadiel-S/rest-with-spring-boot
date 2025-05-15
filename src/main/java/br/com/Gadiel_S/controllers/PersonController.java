@@ -1,18 +1,18 @@
 package br.com.Gadiel_S.controllers;
 
 
-import br.com.Gadiel_S.data.dto.v1.PersonDTO;
-import br.com.Gadiel_S.data.dto.v2.PersonDTOV2;
+import br.com.Gadiel_S.data.dto.PersonDTO;
 import br.com.Gadiel_S.services.PersonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/person/v1")
 public class PersonController {
 
     @Autowired
@@ -27,7 +27,13 @@ public class PersonController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public PersonDTO findById(@PathVariable("id") Long id) {
-        return service.findById(id);
+        var person = service.findById(id);
+        person.setBirthDay(new Date());
+//        person.setPhoneNumber("+55 (34) 98765-4321");
+        person.setPhoneNumber("");
+        person.setLastName(null);
+        person.setSensitiveData("Foo Bar");
+        return person;
     }
 
     @PostMapping(
@@ -36,14 +42,6 @@ public class PersonController {
     )
     public PersonDTO create(@RequestBody PersonDTO person) {
         return service.create(person);
-    }
-
-    @PostMapping(value = "/v2",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public PersonDTOV2 create(@RequestBody PersonDTOV2 person) {
-        return service.createV2(person);
     }
 
     @PutMapping(

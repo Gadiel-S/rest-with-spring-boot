@@ -3,8 +3,7 @@ package br.com.Gadiel_S.unittests.mapper.mocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.Gadiel_S.data.dto.v1.PersonDTO;
-import br.com.Gadiel_S.models.PersonDTO;
+import br.com.Gadiel_S.data.dto.PersonDTO;
 
 public class MockPerson {
 
