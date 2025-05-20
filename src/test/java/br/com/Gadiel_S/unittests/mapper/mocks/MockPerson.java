@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.Gadiel_S.data.dto.PersonDTO;
+import br.com.Gadiel_S.models.Person;
 
 public class MockPerson {
 
 
-    public PersonDTO mockEntity() {
+    public Person mockEntity() {
         return mockEntity(0);
     }
     
@@ -16,8 +17,8 @@ public class MockPerson {
         return mockDTO(0);
     }
     
-    public List<PersonDTO> mockEntityList() {
-        List<PersonDTO> persons = new ArrayList<PersonDTO>();
+    public List<Person> mockEntityList() {
+        List<Person> persons = new ArrayList<Person>();
         for (int i = 0; i < 14; i++) {
             persons.add(mockEntity(i));
         }
@@ -32,8 +33,8 @@ public class MockPerson {
         return persons;
     }
     
-    public PersonDTO mockEntity(Integer number) {
-        PersonDTO person = new PersonDTO();
+    public Person mockEntity(Integer number) {
+        Person person = new Person();
         person.setAddress("Address Test" + number);
         person.setFirstName("First Name Test" + number);
         person.setGender(((number % 2)==0) ? "Male" : "Female");
