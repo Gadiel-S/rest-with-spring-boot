@@ -1,9 +1,10 @@
-package br.com.Gadiel_S.services;
+package br.com.Gadiel_S.unittests.services;
 
 import br.com.Gadiel_S.data.dto.BookDTO;
 import br.com.Gadiel_S.exceptions.RequiredObjectIsNullException;
 import br.com.Gadiel_S.models.Book;
 import br.com.Gadiel_S.repository.BookRepository;
+import br.com.Gadiel_S.services.BookServices;
 import br.com.Gadiel_S.unittests.mapper.mocks.MockBook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

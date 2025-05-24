@@ -1,11 +1,10 @@
+server:
+  port: 8888
 spring:
   application:
     name: rest-with-spring-boot
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/rest_with_spring_boot?useTimezone=true&serverTimezone=UTC
-    username: root
-    password: 11082003
   jpa:
     hibernate:
       ddl-auto: none
@@ -19,6 +18,6 @@ logging:
     # root: WARN
     # br.com.Gadiel_S: DEBUG
 spring-doc:
-#  paths-to-match: /api/**/v1/**
+  paths-to-match: /api/**/v1/**
   swagger-ui:
     use-root-path: true

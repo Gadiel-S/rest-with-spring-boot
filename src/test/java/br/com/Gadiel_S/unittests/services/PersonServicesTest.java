@@ -1,14 +1,11 @@
-package br.com.Gadiel_S.services;
+package br.com.Gadiel_S.unittests.services;
 
 import br.com.Gadiel_S.data.dto.PersonDTO;
 import br.com.Gadiel_S.exceptions.RequiredObjectIsNullException;
 import br.com.Gadiel_S.models.Person;
 import br.com.Gadiel_S.repository.PersonRepository;
+import br.com.Gadiel_S.services.PersonServices;
 import br.com.Gadiel_S.unittests.mapper.mocks.MockPerson;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -20,6 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
