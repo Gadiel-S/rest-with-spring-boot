@@ -1,4 +1,4 @@
-package br.com.Gadiel_S.integrationtests.controllers.withjson;
+package br.com.Gadiel_S.integrationtests.controllers.cors.withjson;
 
 import br.com.Gadiel_S.config.TestConfigs;
 import br.com.Gadiel_S.data.dto.PersonDTO;
@@ -16,12 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
-import static junit.framework.TestCase.*;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PersonControllerTest extends AbstractIntegrationTest {
+class PersonControllerCorsTest extends AbstractIntegrationTest {
 
   private static RequestSpecification specification;
   private static ObjectMapper objectMapper;
@@ -71,11 +70,12 @@ class PersonControllerTest extends AbstractIntegrationTest {
     assertEquals("Stallman", createdPerson.getLastName());
     assertEquals("New York City - New York - USA", createdPerson.getAddress());
     assertEquals("Male", createdPerson.getGender());
+    assertTrue(createdPerson.getEnabled());
   }
 
   @Test
   @Order(2)
-  void createWithWrongOrigin() throws JsonProcessingException {
+  void createWithWrongOrigin() {
     specification = new RequestSpecBuilder()
         .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LINKEDIN)
         .setBasePath("/api/person/v1")
@@ -134,11 +134,12 @@ class PersonControllerTest extends AbstractIntegrationTest {
     assertEquals("Stallman", createdPerson.getLastName());
     assertEquals("New York City - New York - USA", createdPerson.getAddress());
     assertEquals("Male", createdPerson.getGender());
+    assertTrue(createdPerson.getEnabled());
   }
 
   @Test
   @Order(4)
-  void findByIdWithWrongOrigin() throws JsonProcessingException {
+  void findByIdWithWrongOrigin() {
     specification = new RequestSpecBuilder()
         .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LINKEDIN)
         .setBasePath("/api/person/v1")
@@ -166,5 +167,6 @@ class PersonControllerTest extends AbstractIntegrationTest {
     person.setLastName("Stallman");
     person.setAddress("New York City - New York - USA");
     person.setGender("Male");
+    person.setEnabled(true);
   }
 }
