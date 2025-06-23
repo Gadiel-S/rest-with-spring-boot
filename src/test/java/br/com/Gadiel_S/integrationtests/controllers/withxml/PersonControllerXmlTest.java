@@ -2,9 +2,9 @@ package br.com.Gadiel_S.integrationtests.controllers.withxml;
 
 import br.com.Gadiel_S.config.TestConfigs;
 import br.com.Gadiel_S.integrationtests.dto.PersonDTO;
+import br.com.Gadiel_S.integrationtests.dto.wrappers.xmlAndYaml.PagedModelPerson;
 import br.com.Gadiel_S.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.restassured.builder.RequestSpecBuilder;
@@ -177,6 +177,7 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
   void findAllTest() throws JsonProcessingException {
     var content = given(specification)
         .accept(MediaType.APPLICATION_XML_VALUE)
+        .queryParams("page", 3, "size", 12, "direction", "asc")
         .when()
           .get()
         .then()
@@ -186,16 +187,60 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
           .body()
             .asString();
 
-    List<PersonDTO> people = xmlMapper.readValue(content, new TypeReference<>() {});
+    PagedModelPerson wrapper = xmlMapper.readValue(content, PagedModelPerson.class);
+    List<PersonDTO> people = wrapper.getContent();
 
     PersonDTO personOne = people.getFirst();
 
     assertNotNull(personOne.getId());
     assertTrue(personOne.getId() > 0);
 
-    assertEquals("Ayrton", personOne.getFirstName());
-    assertEquals("Senna", personOne.getLastName());
-    assertEquals("São Paulo - Brasil - América", personOne.getAddress());
+    assertEquals("Allin", personOne.getFirstName());
+    assertEquals("Otridge", personOne.getLastName());
+    assertEquals("09846 Independence Center", personOne.getAddress());
+    assertEquals("Male", personOne.getGender());
+    assertFalse(personOne.getEnabled());
+
+    PersonDTO personThree = people.get(2);
+
+    assertNotNull(personThree.getId());
+    assertTrue(personThree.getId() > 0);
+
+    assertEquals("Allyn", personThree.getFirstName());
+    assertEquals("Josh", personThree.getLastName());
+    assertEquals("119 Declaration Lane", personThree.getAddress());
+    assertEquals("Female", personThree.getGender());
+    assertFalse(personThree.getEnabled());
+  }
+
+  @Test
+  @Order(7)
+  void findByNameTest() throws JsonProcessingException {
+    // {{baseUrl}}/api/person/v1/findPeopleByName/and?page=0&size=12&direction=asc
+    var content = given(specification)
+        .accept(MediaType.APPLICATION_XML_VALUE)
+        .pathParam("firstName", "and")
+        .queryParams("page", 0, "size", 12, "direction", "asc")
+        .when()
+          .get("findPeopleByName/{firstName}")
+        .then()
+          .statusCode(200)
+          .contentType(MediaType.APPLICATION_XML_VALUE)
+        .extract()
+          .body()
+            .asString();
+
+    PagedModelPerson wrapper = xmlMapper.readValue(content, PagedModelPerson.class);
+    List<PersonDTO> people = wrapper.getContent();
+
+    PersonDTO personOne = people.getFirst();
+
+    assertNotNull(personOne.getId());
+    assertTrue(personOne.getId() > 0);
+
+    assertEquals("Alessandro", personOne.getFirstName());
+    assertEquals("McFaul", personOne.getLastName());
+    assertEquals("5 Lukken Plaza", personOne.getAddress());
     assertEquals("Male", personOne.getGender());
     assertTrue(personOne.getEnabled());
 
@@ -204,14 +249,14 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
     assertNotNull(personThree.getId());
     assertTrue(personThree.getId() > 0);
 
-    assertEquals("Nelipe", personThree.getFirstName());
-    assertEquals("Feto", personThree.getLastName());
-    assertEquals("Rio de Janeiro - Brasil", personThree.getAddress());
+    assertEquals("Bertrando", personThree.getFirstName());
+    assertEquals("Becconsall", personThree.getLastName());
+    assertEquals("35 Dryden Junction", personThree.getAddress());
     assertEquals("Male", personThree.getGender());
     assertTrue(personThree.getEnabled());
   }
 
-  private static void mockPerson() throws JsonProcessingException {
+  private static void mockPerson() {
     person.setFirstName("Linus");
     person.setLastName("Torvalds");
     person.setAddress("Helsinki - Finland");

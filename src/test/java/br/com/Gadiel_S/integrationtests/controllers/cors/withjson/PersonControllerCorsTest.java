@@ -1,7 +1,7 @@
 package br.com.Gadiel_S.integrationtests.controllers.cors.withjson;
 
 import br.com.Gadiel_S.config.TestConfigs;
-import br.com.Gadiel_S.data.dto.PersonDTO;
+import br.com.Gadiel_S.integrationtests.dto.PersonDTO;
 import br.com.Gadiel_S.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
