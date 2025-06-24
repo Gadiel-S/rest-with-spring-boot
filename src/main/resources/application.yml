@@ -1,5 +1,7 @@
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000,https://github.com/Gadiel-S
+file:
+  uploadDir: C:\temp\UploadDir
 spring:
   application:
     name: rest-with-spring-boot
@@ -15,11 +17,17 @@ spring:
       hibernate:
     show-sql: false
     open-in-view: false
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
 logging:
   level:
     root: INFO
     # root: WARN
-    # br.com.Gadiel_S: DEBUG
+    br.com.Gadiel_S: DEBUG
 spring-doc:
 #  paths-to-match: /api/**/v1/**
   swagger-ui:
