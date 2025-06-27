@@ -19,6 +19,8 @@
 		<dozer.version>7.0.0</dozer.version>
 		<springdoc.version>2.8.8</springdoc.version>
 		<testcontainers.version>1.21.0</testcontainers.version>
+		<apache.poi.version>5.4.1</apache.poi.version>
+		<commons-csv.version>1.14.0</commons-csv.version>
 	</properties>
 
 	<dependencies>
@@ -54,7 +56,18 @@
 			<artifactId>jackson-dataformat-yaml</artifactId>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>${commons-csv.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${apache.poi.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
