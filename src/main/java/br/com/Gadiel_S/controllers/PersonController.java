@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 //@CrossOrigin(origins = "http://localhost:8080")
 @RestController
@@ -43,14 +44,15 @@ public class PersonController implements PersonControllerDocs {
       @RequestParam(value = "direction", defaultValue = "asc") String direction
   ) {
     var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
-    Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
     return ResponseEntity.ok(service.findAll(pageable));
   }
 
   @GetMapping(value = "/exportPage",
       produces = {
         MediaTypes.APPLICATION_XLSX_VALUE,
-        MediaTypes.APPLICATION_CSV_VALUE
+        MediaTypes.APPLICATION_CSV_VALUE,
+        MediaTypes.APPLICATION_PDF_VALUE
   })
   @Override
   public ResponseEntity<Resource> exportPage(
@@ -65,8 +67,14 @@ public class PersonController implements PersonControllerDocs {
     String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
     Resource file = service.exportPage(pageable, acceptHeader);
 
+    Map<String, String> extensionMap = Map.of(
+        MediaTypes.APPLICATION_CSV_VALUE, ".csv",
+        MediaTypes.APPLICATION_XLSX_VALUE, ".xlsx",
+        MediaTypes.APPLICATION_PDF_VALUE, ".pdf"
+    );
+
+    var fileExtension = extensionMap.getOrDefault(acceptHeader, "");
     var contentType = acceptHeader != null ? acceptHeader : "application/octet-stream";
-    var fileExtension = MediaTypes.APPLICATION_XLSX_VALUE.equalsIgnoreCase(acceptHeader) ? ".xlsx" : ".csv";
     var fileName = "people_exported" + fileExtension;
 
     return ResponseEntity.ok()
@@ -77,11 +85,28 @@ public class PersonController implements PersonControllerDocs {
         .body(file);
   }
 
+  @GetMapping(value = "/export/{id}",
+      produces = {
+          MediaTypes.APPLICATION_PDF_VALUE
+      })
+  @Override
+  public ResponseEntity<Resource> export(@PathVariable("id") Long id, HttpServletRequest request) {
+    String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
+    Resource file = service.exportPerson(id, acceptHeader);
+
+    return ResponseEntity.ok()
+        .contentType(MediaType.parseMediaType(acceptHeader))
+        .header(
+            HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=person.pdf")
+        .body(file);
+  }
+
   @GetMapping(value = "/findPeopleByName/{firstName}",
       produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.APPLICATION_YAML_VALUE}
+          MediaType.APPLICATION_JSON_VALUE,
+          MediaType.APPLICATION_XML_VALUE,
+          MediaType.APPLICATION_YAML_VALUE}
   )
   @Override
   public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findByName(

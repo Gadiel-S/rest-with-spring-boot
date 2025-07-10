@@ -3,10 +3,10 @@ package br.com.Gadiel_S.file.exporter.contract;
 import br.com.Gadiel_S.data.dto.PersonDTO;
 import org.springframework.core.io.Resource;
 
-import java.io.InputStream;
 import java.util.List;
 
-public interface FileExporter {
+public interface PersonExporter {
 
-  Resource exportFile(List<PersonDTO> people) throws Exception;
+  Resource exportPeople(List<PersonDTO> people) throws Exception;
+  Resource exportPerson(PersonDTO person) throws Exception;
 }
