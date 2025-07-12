@@ -7,6 +7,7 @@
 			<conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
 		</conditionalStyle>
 	</style>
+	<parameter name="LOGO_PATH" class="java.io.InputStream"/>
 	<query language="SQL"><![CDATA[SELECT 
     id,
 	CONCAT(first_name, ' ', last_name) AS name,
@@ -44,7 +45,7 @@ FROM rest_with_spring_boot.person]]></query>
 			<text><![CDATA[PEOPLE REPORT]]></text>
 		</element>
 		<element kind="image" uuid="ee77d5dd-220d-4cc2-b26d-e711a07c4306" x="0" y="0" width="180" height="60">
-			<expression><![CDATA["C:/Users/gadiel/Downloads/Spring Boot Logo.png"]]></expression>
+			<expression><![CDATA[$P{LOGO_PATH}]]></expression>
 		</element>
 	</title>
 	<pageHeader height="30" splitType="Stretch">

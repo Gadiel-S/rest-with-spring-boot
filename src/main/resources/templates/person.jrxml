@@ -6,6 +6,7 @@
 	<parameter name="SUB_REPORT_DATA_SOURCE" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="QR_CODEIMAGE" class="java.io.InputStream"/>
 	<parameter name="SUB_REPORT_DIR" class="java.lang.String"/>
+	<parameter name="LOGO_PATH" class="java.io.InputStream"/>
 	<query language="SQL"><![CDATA[SELECT id,
 	CONCAT(first_name, ' ', last_name) AS name,
 	address,
@@ -54,7 +55,8 @@ WHERE
 	<background splitType="Stretch"/>
 	<title height="160" splitType="Stretch">
 		<element kind="image" uuid="8379724d-41f2-4c45-b720-ec3f3b4687d8" x="0" y="0" width="220" height="70">
-			<expression><![CDATA["C:/Users/gadiel/Downloads/Spring Boot Logo.png"]]></expression>
+			<expression><![CDATA[$P{LOGO_PATH}
+]]></expression>
 		</element>
 		<element kind="staticText" uuid="cbc6954b-a833-4a66-9a2b-ff40780557a9" x="0" y="70" width="40" height="30" fontSize="12.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
 			<text><![CDATA[Code:]]></text>

@@ -31,8 +31,9 @@ public class PdfExporter implements PersonExporter {
     }
     JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
     JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(people);
+    InputStream logo = getClass().getResourceAsStream("/assets/spring-boot-logo.png");
     Map<String, Object> parameters = new HashMap<>();
-    // parameters.put("title", "People Report");
+    parameters.put("LOGO_PATH", logo);
     JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
     try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
       JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
@@ -59,12 +60,14 @@ public class PdfExporter implements PersonExporter {
     JRBeanCollectionDataSource subReportDataSource = new JRBeanCollectionDataSource(person.getBooks());
 
     String path = getClass().getResource("/templates/books.jasper").getPath();
+    InputStream logo = getClass().getResourceAsStream("/assets/spring-boot-logo.png");
 
     Map<String, Object> parameters = new HashMap<>();
     parameters.put("SUB_REPORT_DATA_SOURCE", subReportDataSource);
     parameters.put("BOOK_SUB_REPORT", subReport);
     parameters.put("SUB_REPORT_DIR", path);
     parameters.put("QR_CODEIMAGE", qrCodeStream);
+    parameters.put("LOGO_PATH", logo);
 
     JasperPrint jasperPrint = JasperFillManager.fillReport(mainReport, parameters, mainDataSource);
     try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
