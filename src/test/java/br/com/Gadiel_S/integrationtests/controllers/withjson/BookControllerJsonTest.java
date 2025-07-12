@@ -145,7 +145,7 @@ class BookControllerJsonTest extends AbstractIntegrationTest {
   void findAllTest() throws JsonProcessingException {
     var content = given(specification)
         .accept(MediaType.APPLICATION_JSON_VALUE)
-        .queryParams("page", 0, "size", 12, "direction", "asc")
+        .queryParams("page", 3, "size", 12, "direction", "asc")
         .when()
           .get()
         .then()
@@ -163,20 +163,20 @@ class BookControllerJsonTest extends AbstractIntegrationTest {
     assertNotNull(bookOne.getId());
     assertTrue(bookOne.getId() > 0);
 
-    assertEquals("Craig Larman", bookOne.getAuthor());
+    assertEquals("Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates", bookOne.getAuthor());
     assertNotNull(bookOne.getLaunchDate());
-    assertEquals(144.98, bookOne.getPrice());
-    assertEquals("Agile and Iterative Development: A Manager’s Guide", bookOne.getTitle());
+    assertEquals(110.0, bookOne.getPrice());
+    assertEquals("Head First Design Patterns", bookOne.getTitle());
 
     BookDTO bookThree = book.get(2);
 
     assertNotNull(bookThree.getId());
     assertTrue(bookThree.getId() > 0);
 
-    assertEquals("Craig Larman", bookThree.getAuthor());
+    assertEquals("Brian Goetz e Tim Peierls", bookThree.getAuthor());
     assertNotNull(bookThree.getLaunchDate());
-    assertEquals(72.89, bookThree.getPrice());
-    assertEquals("Agile and Iterative Development: A Manager’s Guide", bookThree.getTitle());
+    assertEquals(80.0, bookThree.getPrice());
+    assertEquals("Java Concurrency in Practice", bookThree.getTitle());
   }
 
   private void mockBook() {
