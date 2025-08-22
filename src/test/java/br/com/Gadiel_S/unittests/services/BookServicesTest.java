@@ -4,7 +4,7 @@ import br.com.Gadiel_S.data.dto.BookDTO;
 import br.com.Gadiel_S.exceptions.RequiredObjectIsNullException;
 import br.com.Gadiel_S.models.Book;
 import br.com.Gadiel_S.repository.BookRepository;
-import br.com.Gadiel_S.services.BookServices;
+import br.com.Gadiel_S.services.BookService;
 import br.com.Gadiel_S.unittests.mapper.mocks.MockBook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class BookServicesTest {
     MockBook input;
 
     @InjectMocks
-    private BookServices service;
+    private BookService service;
 
     @Mock
     BookRepository repository;

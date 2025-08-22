@@ -4,7 +4,7 @@ import br.com.Gadiel_S.data.dto.PersonDTO;
 import br.com.Gadiel_S.exceptions.RequiredObjectIsNullException;
 import br.com.Gadiel_S.models.Person;
 import br.com.Gadiel_S.repository.PersonRepository;
-import br.com.Gadiel_S.services.PersonServices;
+import br.com.Gadiel_S.services.PersonService;
 import br.com.Gadiel_S.unittests.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class PersonServicesTest {
     MockPerson input;
 
     @InjectMocks
-    private PersonServices service;
+    private PersonService service;
 
     @Mock
     PersonRepository repository;

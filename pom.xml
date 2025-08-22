@@ -23,6 +23,7 @@
 		<commons-csv.version>1.14.0</commons-csv.version>
 		<jasperreports.version>7.0.3</jasperreports.version>
 		<zxing.version>3.5.3</zxing.version>
+		<java-jwt.version>4.4.0</java-jwt.version>
 	</properties>
 
 	<dependencies>
@@ -42,11 +43,21 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>${java-jwt.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.hateoas</groupId>
 			<artifactId>spring-hateoas</artifactId>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>

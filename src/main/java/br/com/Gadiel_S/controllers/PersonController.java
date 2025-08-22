@@ -4,7 +4,7 @@ package br.com.Gadiel_S.controllers;
 import br.com.Gadiel_S.controllers.docs.PersonControllerDocs;
 import br.com.Gadiel_S.data.dto.PersonDTO;
 import br.com.Gadiel_S.file.exporter.MediaTypes;
-import br.com.Gadiel_S.services.PersonServices;
+import br.com.Gadiel_S.services.PersonService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ import java.util.Map;
 public class PersonController implements PersonControllerDocs {
 
   @Autowired
-  private PersonServices service;
+  private PersonService service;
 
   @GetMapping(produces = {
       MediaType.APPLICATION_JSON_VALUE,

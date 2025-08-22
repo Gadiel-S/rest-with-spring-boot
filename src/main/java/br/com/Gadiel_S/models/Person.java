@@ -2,6 +2,7 @@ package br.com.Gadiel_S.models;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +10,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "person")
 public class Person implements Serializable {
-
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Id

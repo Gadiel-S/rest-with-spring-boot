@@ -2,7 +2,7 @@ package br.com.Gadiel_S.controllers;
 
 import br.com.Gadiel_S.controllers.docs.BookControllerDocs;
 import br.com.Gadiel_S.data.dto.BookDTO;
-import br.com.Gadiel_S.services.BookServices;
+import br.com.Gadiel_S.services.BookService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class BookController implements BookControllerDocs {
 
   @Autowired
-  private BookServices service;
+  private BookService service;
 
   @GetMapping(produces = {
       MediaType.APPLICATION_JSON_VALUE,
@@ -32,7 +32,6 @@ public class BookController implements BookControllerDocs {
       @RequestParam(value = "size", defaultValue = "12") Integer size,
       @RequestParam(value = "direction", defaultValue = "asc") String direction
   ) {
-
     var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
     return ResponseEntity.ok(service.findAll(pageable));
@@ -80,7 +79,7 @@ public class BookController implements BookControllerDocs {
   }
 
   @DeleteMapping(value = "/{id}")
-//  @Override
+  @Override
   public ResponseEntity<?> delete(@PathVariable("id") Long id) {
     service.delete(id);
     return ResponseEntity.noContent().build();

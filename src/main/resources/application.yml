@@ -2,6 +2,11 @@ cors:
   originPatterns: http://localhost:8080,http://localhost:3000,https://github.com/Gadiel-S
 file:
   uploadDir: C:\temp\UploadDir
+security:
+  jwt:
+    token:
+      secret-key: 53cr37
+      expire-length: 3600000
 email:
   subject: "Default Subject"
   message: "Default Message"
@@ -42,6 +47,8 @@ logging:
     # root: WARN
     # br.com.Gadiel_S: DEBUG
 spring-doc:
-#  paths-to-match: /api/**/v1/**
+  paths-to-match:
+  - /auth/**
+  - /api/**/v1/**
   swagger-ui:
     use-root-path: true
