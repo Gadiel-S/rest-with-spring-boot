@@ -2,7 +2,9 @@ package br.com.Gadiel_S.integrationtests.controllers.withyaml;
 
 import br.com.Gadiel_S.config.TestConfigs;
 import br.com.Gadiel_S.integrationtests.controllers.withyaml.mapper.YAMLMapper;
+import br.com.Gadiel_S.integrationtests.dto.AccountCredentialsDTO;
 import br.com.Gadiel_S.integrationtests.dto.BookDTO;
+import br.com.Gadiel_S.integrationtests.dto.TokenDTO;
 import br.com.Gadiel_S.integrationtests.dto.wrappers.xmlAndYaml.PagedModelBook;
 import br.com.Gadiel_S.integrationtests.testcontainers.AbstractIntegrationTest;
 import io.restassured.RestAssured;
@@ -30,27 +32,58 @@ class BookControllerYamlTest extends AbstractIntegrationTest {
   private static RequestSpecification specification;
   private static YAMLMapper objectMapper;
   private static BookDTO book;
+  private static TokenDTO token;
 
   @BeforeAll
   static void setUp() {
     objectMapper = new YAMLMapper();
     book = new BookDTO();
+    token = new TokenDTO();
+  }
+
+  @Test
+  @Order(0)
+  void signIn() {
+    AccountCredentialsDTO credentials = new AccountCredentialsDTO("gadiel", "admin123");
+
+    token = given()
+        .config(RestAssured.config()
+            .encoderConfig(EncoderConfig.encoderConfig()
+                .encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT)))
+        .basePath("/auth/signin")
+        .port(TestConfigs.SERVER_PORT)
+        .contentType(MediaType.APPLICATION_YAML_VALUE)
+        .accept(MediaType.APPLICATION_YAML_VALUE)
+        .body(credentials, objectMapper)
+        .when()
+        .post()
+        .then()
+        .statusCode(200)
+        .contentType(MediaType.APPLICATION_YAML_VALUE)
+        .extract()
+        .body()
+        .as(TokenDTO.class, objectMapper);
+
+    specification = new RequestSpecBuilder()
+        .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
+        .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + token.getAccessToken())
+        .setBasePath("/api/book/v1")
+        .setPort(TestConfigs.SERVER_PORT)
+        .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+        .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+        .setConfig(RestAssured.config()
+            .encoderConfig(EncoderConfig.encoderConfig()
+                .encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT)))
+        .build();
+
+    assertNotNull(token.getAccessToken());
+    assertNotNull(token.getRefreshToken());
   }
 
   @Test
   @Order(1)
   void createTest() {
     mockBook();
-    specification = new RequestSpecBuilder()
-        .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
-        .setBasePath("/api/book/v1")
-        .setPort(TestConfigs.SERVER_PORT)
-          .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-          .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-          .setConfig(RestAssured.config()
-            .encoderConfig(EncoderConfig.encoderConfig()
-              .encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT)))
-        .build();
 
     var createdBook = given(specification)
         .contentType(MediaType.APPLICATION_YAML_VALUE)

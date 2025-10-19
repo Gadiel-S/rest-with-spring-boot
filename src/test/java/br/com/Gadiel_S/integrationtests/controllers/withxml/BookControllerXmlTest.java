@@ -1,7 +1,9 @@
 package br.com.Gadiel_S.integrationtests.controllers.withxml;
 
 import br.com.Gadiel_S.config.TestConfigs;
+import br.com.Gadiel_S.integrationtests.dto.AccountCredentialsDTO;
 import br.com.Gadiel_S.integrationtests.dto.BookDTO;
+import br.com.Gadiel_S.integrationtests.dto.TokenDTO;
 import br.com.Gadiel_S.integrationtests.dto.wrappers.xmlAndYaml.PagedModelBook;
 import br.com.Gadiel_S.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,27 +29,57 @@ import static org.junit.jupiter.api.Assertions.*;
 class BookControllerXmlTest extends AbstractIntegrationTest {
 
   private static RequestSpecification specification;
-  private static XmlMapper xmlMapper;
+  private static XmlMapper objectMapper;
   private static BookDTO book;
+  private static TokenDTO token;
 
   @BeforeAll
   static void setUp() {
-    xmlMapper = new XmlMapper();
-    xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    objectMapper = new XmlMapper();
+    objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     book = new BookDTO();
+    token = new TokenDTO();
+  }
+
+  @Test
+  @Order(0)
+  void signIn() throws JsonProcessingException {
+    AccountCredentialsDTO credentials = new AccountCredentialsDTO("gadiel", "admin123");
+
+    var content = given()
+        .basePath("/auth/signin")
+        .port(TestConfigs.SERVER_PORT)
+        .contentType(MediaType.APPLICATION_XML_VALUE)
+        .accept(MediaType.APPLICATION_XML_VALUE)
+        .body(credentials)
+        .when()
+        .post()
+        .then()
+        .statusCode(200)
+        .contentType(MediaType.APPLICATION_XML_VALUE)
+        .extract()
+        .body()
+        .asString();
+
+    token = objectMapper.readValue(content, TokenDTO.class);
+
+    specification = new RequestSpecBuilder()
+        .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
+        .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + token.getAccessToken())
+        .setBasePath("/api/book/v1")
+        .setPort(TestConfigs.SERVER_PORT)
+        .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+        .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+        .build();
+
+    assertNotNull(token.getAccessToken());
+    assertNotNull(token.getRefreshToken());
   }
 
   @Test
   @Order(1)
   void createTest() throws JsonProcessingException {
     mockBook();
-    specification = new RequestSpecBuilder()
-        .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
-        .setBasePath("/api/book/v1")
-        .setPort(TestConfigs.SERVER_PORT)
-          .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-          .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-        .build();
 
     var content = given(specification)
         .contentType(MediaType.APPLICATION_XML_VALUE)
@@ -62,7 +94,7 @@ class BookControllerXmlTest extends AbstractIntegrationTest {
           .body()
             .asString();
 
-    BookDTO createdBook = xmlMapper.readValue(content, BookDTO.class);
+    BookDTO createdBook = objectMapper.readValue(content, BookDTO.class);
     book = createdBook;
 
     assertNotNull(createdBook.getId());
@@ -92,7 +124,7 @@ class BookControllerXmlTest extends AbstractIntegrationTest {
           .body()
             .asString();
 
-    BookDTO createdBook = xmlMapper.readValue(content, BookDTO.class);
+    BookDTO createdBook = objectMapper.readValue(content, BookDTO.class);
     book = createdBook;
 
     assertNotNull(createdBook.getId());
@@ -119,7 +151,7 @@ class BookControllerXmlTest extends AbstractIntegrationTest {
           .body()
             .asString();
 
-    BookDTO createdBook = xmlMapper.readValue(content, BookDTO.class);
+    BookDTO createdBook = objectMapper.readValue(content, BookDTO.class);
     book = createdBook;
 
     assertNotNull(createdBook.getId());
@@ -157,7 +189,7 @@ class BookControllerXmlTest extends AbstractIntegrationTest {
           .body()
             .asString();
 
-    PagedModelBook wrapper = xmlMapper.readValue(content, PagedModelBook.class);
+    PagedModelBook wrapper = objectMapper.readValue(content, PagedModelBook.class);
     List<BookDTO> book = wrapper.getContent();
 
     BookDTO bookOne = book.getFirst();
