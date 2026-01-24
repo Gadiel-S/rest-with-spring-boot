@@ -17,6 +17,7 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 
 import java.util.List;
@@ -24,9 +25,12 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PersonControllerYamlTest extends AbstractIntegrationTest {
+
+  @LocalServerPort
+  private int port;
 
   private static RequestSpecification specification;
   private static YAMLMapper objectMapper;
@@ -40,6 +44,11 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
     token = new TokenDTO();
   }
 
+  @BeforeEach
+  void setUpEach() {
+    RestAssured.port = port;
+  }
+
   @Test
   @Order(0)
   void signIn() {
@@ -50,7 +59,6 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
             .encoderConfig(EncoderConfig.encoderConfig()
                 .encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT)))
         .basePath("/auth/signin")
-        .port(TestConfigs.SERVER_PORT)
         .contentType(MediaType.APPLICATION_YAML_VALUE)
         .accept(MediaType.APPLICATION_YAML_VALUE)
         .body(credentials, objectMapper)
@@ -67,7 +75,6 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
         .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
         .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + token.getAccessToken())
         .setBasePath("/api/person/v1")
-        .setPort(TestConfigs.SERVER_PORT)
         .addFilter(new RequestLoggingFilter(LogDetail.ALL))
         .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
         .setConfig(RestAssured.config()
