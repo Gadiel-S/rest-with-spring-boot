@@ -1,0 +1,58 @@
+{
+	"id": "9924670a-4f07-414c-8e49-d16d6aa12fc3",
+	"name": "Rest_With_Spring_Boot",
+	"values": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:80",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "excel",
+			"value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "csv",
+			"value": "text/csv",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "pdf",
+			"value": "application/pdf",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "username",
+			"value": "gadiel",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "admin123",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-02-05T18:12:36.166Z",
+	"_postman_exported_using": "Postman/11.83.5-260205-0232"
+}
