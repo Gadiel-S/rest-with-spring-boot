@@ -190,8 +190,8 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<configuration>
 					<url>jdbc:mysql://localhost:3306/rest_with_spring_boot?useTimezone=true&amp;serverTimezone=UTC</url>
-					<user>root</user>
-					<password>11082003</password>
+					<user>${env.DB_USER}</user>
+					<password>${env.DB_PASSWORD}</password>
 				</configuration>
 				<dependencies>
 					<dependency>
